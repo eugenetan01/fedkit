@@ -1,7 +1,8 @@
-use actix_web::{web, App, HttpServer, Responder};
+use actix_web::{web, App, HttpResponse, HttpServer};
+use serde_json::json;
 
-async fn hello() -> impl Responder {
-    "Hello, world!"
+async fn hello() -> HttpResponse {
+    HttpResponse::Ok().json(json!({ "item_id": 123 }))
 }
 
 #[actix_web::main]
