@@ -1,4 +1,5 @@
 use actix_web::{web, App, HttpResponse, HttpServer};
+mod controllers;
 mod models;
 mod routes;
 

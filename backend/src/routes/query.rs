@@ -1,9 +1,21 @@
+use crate::controllers::llm_controller;
 use crate::models::query_request::QueryRequest;
 use actix_web::{post, web, HttpResponse, Responder};
 
 #[post("/query")]
 pub async fn handle_query(req: web::Json<QueryRequest>) -> impl Responder {
-    HttpResponse::Ok().body(format!("Received query: {}", req.query))
+    let query = req.query.clone();
+    match llm_controller::handle_llm_query(query).await {
+        Ok(response) => {
+            // Return Ollama's response in the HTTP response
+            HttpResponse::Ok().json(response)
+        }
+        Err(err) => {
+            // Handle errors and return an Internal Server Error
+            HttpResponse::InternalServerError().body(format!("Error: {}", err))
+        }
+    }
+    // HttpResponse::Ok().body(format!("Received query: {}", req.query))
 }
 
 // use crate::model::{query_request::QueryRequest, query_response::QueryResponse};
